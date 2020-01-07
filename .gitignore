@@ -1,0 +1,13 @@
+**/.DS_Store
+
+### Idea
+.idea
+*.iws
+*.iml
+*.ipr
+**/out/
+
+/db/data/
+
+### ignore artifact
+advertisement-app
