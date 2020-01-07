@@ -20,6 +20,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        db_host: docker.for.mac.localhost
     restart: unless-stopped
     networks:
       - back

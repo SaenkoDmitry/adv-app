@@ -1,5 +1,8 @@
 FROM golang:latest
 
+ARG db_host
+ENV db_host "$db_host"
+
 WORKDIR $GOPATH/src/advertisement-app
 
 COPY . .
