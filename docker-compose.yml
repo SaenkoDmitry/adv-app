@@ -10,7 +10,7 @@ services:
       PGDATA: /var/lib/postgresql/data
     volumes:
       - $GOPATH/src/github.com/SaenkoDmitry/advertisement-app/db/data:/var/lib/postgresql/data
-    restart: unless-stopped
+    restart: on-failure
     networks:
       - back
     ports:
@@ -21,8 +21,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        db_host: docker.for.mac.localhost
-    restart: unless-stopped
+        db_host: host.docker.internal
+    restart: on-failure
     networks:
       - back
     depends_on:
