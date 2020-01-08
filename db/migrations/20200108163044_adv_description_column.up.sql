@@ -1,0 +1,2 @@
+ALTER TABLE adv.adv
+ADD COLUMN description VARCHAR(1000);

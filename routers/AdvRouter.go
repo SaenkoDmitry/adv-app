@@ -24,13 +24,16 @@ func AdvCreate(c *gin.Context) {
 	}
 
 	jsonPhotos, _ := json.Marshal(adv.Photos)
-	newAdv := models.Adv{Name: adv.Name, Price: adv.Price, Photos: postgres.Jsonb{RawMessage: jsonPhotos}}
+	newAdv := models.Adv{
+		Name:        adv.Name,
+		Price:       adv.Price,
+		Avatar:      adv.Avatar,
+		Photos:      postgres.Jsonb{RawMessage: jsonPhotos},
+		Description: adv.Description,
+	}
 	db.GetDB().Create(&newAdv)
 	c.JSON(200, gin.H{
-		"id":    newAdv.ID,
-		"name":  adv.Name,
-		"price": adv.Price,
-		"photo": adv.Photos,
+		"id": newAdv.ID,
 	})
 }
 
@@ -41,12 +44,17 @@ func AdvGet(c *gin.Context) {
 		c.Status(http.StatusNotFound)
 		return
 	}
-	c.JSON(200, gin.H{
-		"id":    adv.ID,
-		"name":  adv.Name,
-		"price": adv.Price,
-		"photo": adv.Photos,
-	})
+	var advDto models.AdvDto
+	advDto.Id = adv.ID
+	advDto.Name = adv.Name
+	advDto.Price = adv.Price
+	advDto.Avatar = adv.Avatar
+	_, ok := c.GetQuery("fields")
+	if ok {
+		advDto.Photos = adv.Photos.RawMessage
+		advDto.Description = adv.Description
+	}
+	c.JSON(200, advDto)
 }
 
 func AdvGetAll(c *gin.Context) {
@@ -56,14 +64,25 @@ func AdvGetAll(c *gin.Context) {
 	}
 
 	var advs []models.Adv
-	paginator := pagination.Paging(&pagination.Param{
+	pagination.Paging(&pagination.Param{
 		DB:    db.GetDB(),
 		Page:  utils.GetIntOrDefault(params.Page, 1),
-		Limit: utils.GetIntOrDefault(params.Limit, 3),
-		OrderBy: []string{utils.GetStringOrDefault(params.OrderBy, "name") +
+		Limit: utils.GetIntOrDefault(params.Limit, 10),
+		OrderBy: []string{utils.GetStringOrDefault(params.OrderBy, "price") +
 			" " + utils.GetStringOrDefault(params.Direction, "asc")},
 		ShowSQL: true,
 	}, &advs)
 
-	c.JSON(200, paginator.Records)
+	var result []models.AdvDto
+	for _, adv := range advs {
+		advDto := models.AdvDto{
+			Id:     adv.ID,
+			Name:   adv.Name,
+			Price:  adv.Price,
+			Avatar: adv.Avatar,
+		}
+		result = append(result, advDto)
+	}
+
+	c.JSON(200, result)
 }
