@@ -33,25 +33,22 @@ func init() {
 
 	db, err = gorm.Open("postgres", dbUri)
 	if err != nil {
-		panic("can not connect to db")
+		panic(fmt.Errorf("can not connect to db: %q", err))
 	}
 
 	driver, err := postgres.WithInstance(db.DB(), &postgres.Config{})
 	if err != nil {
-		fmt.Print("cannot find driver for db")
+		fmt.Print(fmt.Errorf("cannot find driver for db: %q", err))
 		return
 	}
 
 	m, err := migrate.NewWithDatabaseInstance("file://db/migrations", "avito-adv", driver)
 	if err != nil {
-		fmt.Print("cannot make migrations")
+		fmt.Print(fmt.Errorf("cannot make migrations: %q", err))
 		return
 	}
-
-	err = m.Up()
-	if err != nil {
-		fmt.Print("cannot make migrations", err)
-		return
+	if result := m.Up(); result != nil && result.Error() != "no change" {
+		fmt.Print(fmt.Errorf("something get wrong: %q", result.Error()))
 	}
 }
 
