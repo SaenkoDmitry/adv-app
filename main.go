@@ -10,5 +10,5 @@ func main() {
 	r.POST("/adv", routers.AdvCreate)
 	r.GET("/adv/:id", routers.AdvGet)
 	r.GET("/adv", routers.AdvGetAll)
-	r.Run()
+	r.Run(":9100")
 }
