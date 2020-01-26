@@ -5,8 +5,14 @@
 
 * database mounting data in project directory /db/data
 
+
 ## Getting started
 
+#### project use go modules so you can load all dependencies in your $GOPATH by command:
+
+```
+go mod download
+```
 
 #### to run server and db locally:
 ```
@@ -30,4 +36,5 @@ migrate create -ext sql -dir db/migrations name_of_migration
 
 * extension of gorm for pagination (https://github.com/biezhi/gorm-paginator)
 
+* docker-compose (https://docs.docker.com/compose/)
 
