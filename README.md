@@ -5,6 +5,10 @@
 
 * database mounting data in project directory /db/data
 
+## Swagger docs
+
+#### to see documentation you can open url :
+http://localhost:9100/swagger/index.html
 
 ## Getting started
 
@@ -25,6 +29,12 @@ docker-compose up -d --build
 migrate create -ext sql -dir db/migrations name_of_migration
 ```
 
+#### to update swagger docs you need to add/update comment on method and execute :
+
+```
+swag init
+```
+
 
 ## Technological Stack:
 
@@ -35,6 +45,8 @@ migrate create -ext sql -dir db/migrations name_of_migration
 * migration library and CLI (https://github.com/golang-migrate/migrate)
 
 * extension of gorm for pagination (https://github.com/biezhi/gorm-paginator)
+
+* swagger docs (https://github.com/swaggo/swag)
 
 * docker-compose (https://docs.docker.com/compose/)
 

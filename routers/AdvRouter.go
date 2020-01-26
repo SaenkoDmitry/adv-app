@@ -17,6 +17,15 @@ func init() {
 	binding.Validator = new(validations.DefaultValidator)
 }
 
+// CreateAdv godoc
+// @Summary Create an advertisement
+// @Description create an advertisement by params: name, price, avatar, photos
+// @Accept  json
+// @Produce  json
+// @Param adv body models.AdvCreateReq true "advertisement"
+// @Success 200 {integer} uint "id of created advertisement"
+// @Failure 500 {object} gin.Error
+// @Router /adv [post]
 func AdvCreate(c *gin.Context) {
 	var adv models.AdvCreateReq
 	if ok := utils.ValidateAndBind(c, &adv); !ok {
@@ -37,6 +46,16 @@ func AdvCreate(c *gin.Context) {
 	})
 }
 
+// AdvGet godoc
+// @Summary Get an advertisement
+// @Description get an advertisement by ID
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Adv ID"
+// @Success 200 {object} models.Adv
+// @Failure 404 {object} gin.Error
+// @Failure 500 {object} gin.Error
+// @Router /adv/{id} [get]
 func AdvGet(c *gin.Context) {
 	id := c.Param("id")
 	var adv models.Adv
@@ -57,6 +76,18 @@ func AdvGet(c *gin.Context) {
 	c.JSON(200, advDto)
 }
 
+// AdvGetAll godoc
+// @Summary Get all advertisements by query params
+// @Description get all advertisements by params: orderBy, direction, page, limit
+// @Accept  json
+// @Produce  json
+// @Param page path int true "page number"
+// @Param limit path int true "number of rows"
+// @Param orderBy path int true "field order by: created_at, price"
+// @Param direction path int true "field direction: asc, desc"
+// @Success 200 {array} models.AdvDto
+// @Failure 500 {object} gin.Error
+// @Router /adv [get]
 func AdvGetAll(c *gin.Context) {
 	var params models.AdvSearchReq
 	if ok := utils.ValidateAndBind(c, &params); !ok {

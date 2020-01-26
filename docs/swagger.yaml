@@ -1,0 +1,160 @@
+definitions:
+  gin.Error:
+    properties:
+      err:
+        type: error
+      meta:
+        type: object
+      type:
+        type: ErrorType
+    type: object
+  models.Adv:
+    properties:
+      avatar:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      photos:
+        type: string
+      price:
+        type: number
+    type: object
+  models.AdvCreateReq:
+    properties:
+      avatar:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      photos:
+        items:
+          type: string
+        type: array
+      price:
+        type: number
+    required:
+    - avatar
+    - name
+    - photos
+    - price
+    type: object
+  models.AdvDto:
+    properties:
+      avatar:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      photos:
+        type: string
+      price:
+        type: number
+    type: object
+host: localhost:9100
+info:
+  contact:
+    name: API Support
+    url: https://github.com/SaenkoDmitry/advertisement-app
+  description: This is a server for advertisement store.
+  license: {}
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Advertisement store API
+  version: "1.0"
+paths:
+  /adv:
+    get:
+      consumes:
+      - application/json
+      description: 'get all advertisements by params: orderBy, direction, page, limit'
+      parameters:
+      - description: page number
+        in: path
+        name: page
+        required: true
+        type: integer
+      - description: number of rows
+        in: path
+        name: limit
+        required: true
+        type: integer
+      - description: 'field order by: created_at, price'
+        in: path
+        name: orderBy
+        required: true
+        type: integer
+      - description: 'field direction: asc, desc'
+        in: path
+        name: direction
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.AdvDto'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.Error'
+      summary: Get all advertisements by query params
+    post:
+      consumes:
+      - application/json
+      description: 'create an advertisement by params: name, price, avatar, photos'
+      parameters:
+      - description: advertisement
+        in: body
+        name: adv
+        required: true
+        schema:
+          $ref: '#/definitions/models.AdvCreateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: id of created advertisement
+          schema:
+            type: integer
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.Error'
+      summary: Create an advertisement
+  /adv/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get an advertisement by ID
+      parameters:
+      - description: Adv ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Adv'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.Error'
+      summary: Get an advertisement
+swagger: "2.0"
