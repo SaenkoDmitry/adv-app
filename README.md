@@ -1,11 +1,12 @@
 
 ## Advertisement app
 
+* server by default running on :9100 port and postgres db running on :5432 port
 
+* database mounting data in project directory /db/data
 
 ## Getting started
 
-server by default running on :9100 port and postgres db running on :5432 port
 
 #### to run server and db locally:
 ```
